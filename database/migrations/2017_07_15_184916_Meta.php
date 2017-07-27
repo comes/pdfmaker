@@ -18,6 +18,7 @@ class Meta extends Migration
             $table->string('name');
             $table->json('data');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

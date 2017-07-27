@@ -19,6 +19,7 @@ class Products extends Migration
             $table->unsignedInteger('meta_id');
 
             $table->timestamps();
+            $table->softDeletes();
 
             $table->foreign('meta_id')->references('id')->on('meta');
         });

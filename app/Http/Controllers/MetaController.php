@@ -44,7 +44,7 @@ class MetaController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Meta  $meta
+     * @param  \App\Meta  $metum
      * @return \Illuminate\Http\Response
      */
     public function show(Meta $metum)
@@ -55,7 +55,7 @@ class MetaController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Meta  $meta
+     * @param  \App\Meta  $metum
      * @return \Illuminate\Http\Response
      */
     public function edit(Meta $metum)
@@ -67,23 +67,22 @@ class MetaController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Meta  $meta
+     * @param  \App\Meta  $metum
      * @return \Illuminate\Http\Response
      */
     public function update(MetaRequest $request, Meta $metum)
     {
-
         return $metum->update($request);
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Meta  $meta
+     * @param  \App\Meta  $metum
      * @return \Illuminate\Http\Response
      */
     public function destroy(Meta $metum)
     {
-        return $metum->delete();
+        $metum->delete();
     }
 }

@@ -15,5 +15,5 @@
     </div>
 </div>
 
-<example></example>
+<remote-data-table apipath="/api/meta" vname="Meta Objects"></remote-data-table>
 @endsection
