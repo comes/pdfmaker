@@ -15,4 +15,10 @@ class Meta extends Model
     protected $casts = [
         'data' => 'object',
     ];
+
+    public function getDescription() {
+        return [
+            'data' => 'json'
+        ];
+    }
 }

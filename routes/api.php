@@ -19,3 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::resource('/meta', MetaController::class);
 Route::resource('/product', ProductController::class);
+Route::get('/product/meta/describe', 'ProductController@describe');

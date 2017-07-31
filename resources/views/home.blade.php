@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 col-md-offset-2">
+        <div class="col-lg-10 col-lg-offset-1 col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-heading">Dashboard</div>
 
@@ -11,9 +11,11 @@
                     You are logged in!
                 </div>
             </div>
+
+            <remote-data-table apipath="/api/product" vname="Produkte" type="product"></remote-data-table>
         </div>
     </div>
 </div>
 
-<remote-data-table apipath="/api/meta" vname="Meta Objects"></remote-data-table>
+
 @endsection

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductRequest;
 use App\Product;
 use Illuminate\Http\Request;
 
@@ -14,7 +15,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        //
+        return Product::paginate(10);
     }
 
     /**
@@ -33,9 +34,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ProductRequest $request)
     {
-        //
+        $product = (new Product)->forceFill($request->all());
+        $product->save();
+        return $product;
     }
 
     /**
@@ -81,5 +84,14 @@ class ProductController extends Controller
     public function destroy(Product $product)
     {
         //
+    }
+
+    /**
+     * Return Meta Description of given Object
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function describe() {
+        return Product::getDescription();
     }
 }
