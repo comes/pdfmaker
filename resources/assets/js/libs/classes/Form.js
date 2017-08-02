@@ -31,7 +31,6 @@ export class Form{
 		//method of the form
 		this.method = request.method || 'post'
 
-
 		this.originalData = inputs;
 		for (let field in inputs) {
 			this[field] = inputs[field];
@@ -46,8 +45,24 @@ export class Form{
 	data() {
 		let data = {}
 		for (let prop in this.originalData) {
-			data[this[prop].name]=this[prop].value
-		}
+            var name = this[prop].name
+            var value = this[prop].value
+            var re = /(\w+)\[(\w+)\]/i;
+            var found = name.match(re);
+
+            // we don't like empty values in our data sets
+            if (value.length === 0) continue
+
+            if (found === null) {
+                data[name] = this[prop].value
+            } else {
+
+                if (typeof data[found[1]] === 'undefined') {
+                    data[found[1]] = {}
+                }
+                data[found[1]][found[2]] = this[prop].value
+            }
+        }
 		return data;
 	}
 

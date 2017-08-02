@@ -1,5 +1,5 @@
 <template>
-	<div class="dynamic-form-wrapper">
+	<div class="dynamic-form-wrapper" :id="uniqid">
 		<div class="modal fade" tabindex="-1" role="dialog" v-if="modal">
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
@@ -66,22 +66,28 @@ export default {
     },
 	data () {
 		return {
+		    uniqid: '',
 			form:new Form(this.config.inputs,this.config.request)
 		};
 	},
-	watch:{
-		config(){
-			if (this.config.ModalShow == true) {
-				$('.modal').modal('show')
-			}
-			else {
-				$('.modal').modal('hide')
-			}
-			this.form = new Form(this.config.inputs,this.config.request)
-		}
+	watch: {
+	    config () {
+            this.form = new Form(this.config.inputs,this.config.request)
+        },
+	    'config.ModalShow' (val) {
+	        if (val === true) {
+	            $('#' + this.uniqid + ' .modal').modal('show')
+            } else {
+                $('#' + this.uniqid + ' .modal').modal('hide')
+            }
+        }
 	},
+    mounted () {
+	    this.uniqid = window.guid()
+
+    },
 	methods:{
-		onSubmit(){
+		onSubmit() {
 			this.form.submit()
 			.then((response) => {
 				this.$emit('succes',{res:response,data:this.form.data()})

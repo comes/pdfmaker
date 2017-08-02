@@ -4,7 +4,7 @@
         <alert v-if="loading" v-bind:closeable="false" v-bind:rotate="true" icon="autorenew" state="rose">Lade...</alert>
         <alert v-if="error" v-bind:closeable="false" icon="error_outline" state="danger">{{ error }}</alert>
 
-        <dynamic-form :config="this.formdata"></dynamic-form>
+        <dynamic-form :config="this.formdata" ref="foo" :id="uniqId"></dynamic-form>
 
         <div v-if="data" class="panel panel-default">
 
@@ -107,6 +107,7 @@
         ],
         data () {
             return {
+                uniqId: '',
                 formdata : {
 
                 },
@@ -132,6 +133,7 @@
             // Daten bereits überwacht werden.
             this.fetchData()
             this.fetchMetaData()
+            this.uniqId = window.guid()
         },
         watch: {
             // Rufe die Methode erneut auf, wenn sich die Route ändert.
@@ -217,11 +219,9 @@
                     pages = [],
                     index;
 
-
                 for (index = start; index <= end; index++) {
                     pages.push(index);
                 }
-
 
                 return pages;
             },
@@ -289,10 +289,10 @@
                 }
             },
             add() {
-                console.log('you click on new')
+                this.formdata.ModalShow = true
             },
             edit(key) {
-                console.log('you click on edit')
+                this.formdata.ModalShow = true
             }
         }
     }
