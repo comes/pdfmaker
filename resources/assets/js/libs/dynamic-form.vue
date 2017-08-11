@@ -4,13 +4,18 @@
 			<div class="modal-dialog" role="document">
 				<div class="modal-content">
 					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+							<span aria-hidden="true">&times;</span>
+						</button>
 						<h4 class="modal-title">Modal title</h4>
 					</div>
 					<div class="modal-body">
 						<form @submit.prevent='onSubmit'>
 							<div class="form-group" v-for="input in config.inputs">
-								<dynamic-input :input="input" :class="{'has-error':form.errors.has(input.name)}" :error="form.errors.has(input.name) ? form.errors.get(input.name) : false"></dynamic-input>
+								<dynamic-input :input="input"
+											   :class="{'has-error':form.errors.has(input.name)}"
+											   :error="form.errors.has(input.name) ? form.errors.get(input.name) : false"
+								></dynamic-input>
 							</div>
 							<input type="submit" :class="config.submitClass" :value="config.submitText || 'Submit'">
 						</form>
@@ -28,7 +33,10 @@
 			<h3 v-show="config.title">{{config.title}}</h3>
 			<form @submit.prevent='onSubmit'>
 				<div class="form-group" v-for="input in config.inputs">
-					<dynamic-input :input="input" :class="{'has-error':form.errors.has(input.name)}" :error="form.errors.has(input.name) ? form.errors.get(input.name) : false"></dynamic-input>
+					<dynamic-input :input="input"
+								   :class="{'has-error':form.errors.has(input.name)}"
+								   :error="form.errors.has(input.name) ? form.errors.get(input.name) : false"
+					></dynamic-input>
 				</div>
 				<input type="submit" :class="config.submitClass" :value="config.submitText || 'Submit'">
 			</form>
@@ -75,16 +83,21 @@ export default {
             this.form = new Form(this.config.inputs,this.config.request)
         },
 	    'config.ModalShow' (val) {
+	        let vm = this
 	        if (val === true) {
-	            $('#' + this.uniqid + ' .modal').modal('show')
+                $('#' + this.uniqid + ' .modal').modal('show')
             } else {
                 $('#' + this.uniqid + ' .modal').modal('hide')
             }
+
+            $('#' + this.uniqid + ' .modal').on('hide.bs.modal', function (e) {
+                // do something...
+                vm.config.ModalShow = false
+            })
         }
 	},
     mounted () {
 	    this.uniqid = window.guid()
-
     },
 	methods:{
 		onSubmit() {
@@ -93,10 +106,8 @@ export default {
 				this.$emit('succes',{res:response,data:this.form.data()})
 			})
 			.catch((err) => {
-				console.error(err)
 				this.$emit('fail',err)
 			})
-		
 		}
 	}
 };

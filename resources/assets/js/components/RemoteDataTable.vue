@@ -114,7 +114,7 @@
                 show: true,
                 loading: true,
                 keys: [],
-                data: null,
+                data: null, // table data
                 error: null,
                 blacklist: [
                     'created_at',
@@ -140,40 +140,56 @@
             '$route': 'fetchData'
         },
         methods: {
-            buildFormData() {
+            buildFormData(prefill) {
                 let inputs = []
                 let keys = Object.keys(this.metadata)
 
+                prefill = (typeof prefill === 'undefined')?[]:prefill
+
                 keys.forEach((key, value) => {
                     let data = this.metadata[key]
-                    let t = {}
 
+                    let t = {}
                     if (key === 'options') {
                         let sub_options = {}
                         let subKeys = Object.keys(data)
 
                         subKeys.forEach((k,v) => {
                             let prop = data[k]
+                            let modalValue = null
+                            if (
+                                   (typeof prefill[key] == 'object')
+                                && (prefill[key] !== null)
+                                && (typeof prefill[key][k] !== 'undefined')) {
+                                    modalValue = prefill[key][k]
+                            }
+
                             t = {
                                 type:prop.type,
                                 label:(prop.label?prop.label:k),
                                 name:key + '[' + k + ']',
                                 class:'form-control',
-                                value:'',
+                                value: modalValue,
                                 default: (prop.default)?prop.default:null
-                            };
+                            }
+
                             if (prop.hasOwnProperty('options')) {
                                 t['options'] = prop.options
                             }
                             inputs.push(t)
                         })
                     } else {
+                        let modalValue = null
+                        if (typeof prefill[key] !== 'undefined') {
+                            modalValue = prefill[key]
+                        }
+
                         t = {
                             type:data.type,
                             label:(data.label?data.label:key),
                             name:key,
                             class:'form-control',
-                            value:'',
+                            value: modalValue,
                             default: (data.default)?data.default:null
                         };
 
@@ -185,16 +201,15 @@
                 })
 
                 this.formdata = {
-                    request:{
+                    request: {
                         //post url
                         url:this.apipath,
                         //method
                         method:'post',
-                        /*headers:new Headers({
+                        /* headers:new Headers({
                             'X-CSRF-TOKEN':document.head.querySelector('meta[name="csrf-token"]').content
                         }),
-                        credentials:'include'
-                        */
+                        credentials:'include' */
                     },
                     submitText:'Register',
                     submitClass:'btn btn-primary',
@@ -217,20 +232,19 @@
                     end   = this.data.last_page,
                     current = this.data.current_page,
                     pages = [],
-                    index;
+                    index
 
                 for (index = start; index <= end; index++) {
-                    pages.push(index);
+                    pages.push(index)
                 }
 
-                return pages;
+                return pages
             },
             fetchMetaData () {
                 axios.get(this.apipath + '/meta/describe')
                     .then(response => {
                         this.loading = false
                         this.metadata = response.data
-                        this.buildFormData()
                     }, (response) => {
                         // error callback
                         this.loading = false
@@ -260,12 +274,12 @@
             showPrevPage() {
                 axios.get(this.data.prev_page_url).then((r) => {
                     console.log(r);
-                    this.data = r.data;
+                    this.data = r.data
                 });
             },
             showNextPage() {
                 axios.get(this.data.next_page_url).then((r) => {
-                    this.data = r.data;
+                    this.data = r.data
                 });
             },
             refresh() {
@@ -289,10 +303,18 @@
                 }
             },
             add() {
+                this.buildFormData({})
                 this.formdata.ModalShow = true
             },
             edit(key) {
-                this.formdata.ModalShow = true
+                axios.get(this.data.path + '/' + key).then(
+                    response => {
+                        this.buildFormData(response.data)
+                        this.formdata.ModalShow = true
+                    }, //
+                    response => {}  // error
+                )
+                //
             }
         }
     }
