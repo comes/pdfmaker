@@ -19,16 +19,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -37,8 +27,11 @@ class ProductController extends Controller
     public function store(ProductRequest $request)
     {
         $product = (new Product)->forceFill($request->all());
-        $product->save();
-        return $product;
+        if ($product->save()) {
+            return $product;
+        } else {
+            throw new \Exception('Could not save object!');
+        }
     }
 
     /**
@@ -53,26 +46,20 @@ class ProductController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Product  $product
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Product $product)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \App\Product  $product
+     * @throws \Exception
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Product $product)
     {
-        //
+        if ($product->update($request->all())) {
+            return $product;
+        } else {
+            throw new \Exception('Could not update object!');
+        }
     }
 
     /**

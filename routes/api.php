@@ -17,6 +17,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::resource('/meta', MetaController::class);
-Route::resource('/product', ProductController::class);
+Route::resource('/meta', MetaController::class,['only' => [
+    'index', 'show', 'store', 'update','destroy'
+]]);
+
+Route::resource('/product', ProductController::class,['only' => [
+    'index', 'show', 'store', 'update','destroy'
+]]);
 Route::get('/product/meta/describe', 'ProductController@describe');

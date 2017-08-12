@@ -21,6 +21,10 @@ class Product extends Model
         'buyable' => 'boolean'
     ];
 
+    protected $fillable = [
+        'name', 'description', 'stock', 'buyable','options'
+    ];
+
     public static function getDescription()
     {
         return [
