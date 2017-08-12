@@ -51,7 +51,7 @@ export class Form{
             var found = name.match(re);
 
             // we don't like empty values in our data sets
-            if (value.length === 0) continue
+            if (typeof value != 'boolean' && (value == null || value.length === 0)) continue
 
             if (found === null) {
                 data[name] = this[prop].value
