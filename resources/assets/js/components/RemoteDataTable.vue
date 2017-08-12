@@ -4,7 +4,7 @@
         <alert v-if="loading" v-bind:closeable="false" v-bind:rotate="true" icon="autorenew" state="rose">Lade...</alert>
         <alert v-if="error" v-bind:closeable="false" icon="error_outline" state="danger">{{ error }}</alert>
 
-        <dynamic-form :config="this.formdata" ref="foo" :id="uniqId"></dynamic-form>
+        <dynamic-form :config="this.formdata" ref="foo" :id="uniqId" @success="refresh"></dynamic-form>
 
         <div v-if="data" class="panel panel-default">
 
@@ -143,8 +143,15 @@
             buildFormData(prefill) {
                 let inputs = []
                 let keys = Object.keys(this.metadata)
+                let api_url = this.apipath
+                let method = 'post'
 
-                prefill = (typeof prefill === 'undefined')?[]:prefill
+                if (typeof prefill === 'undefined') { // no prefill data. should be a new object
+                    prefill = []
+                } else { // this is the edit mode
+                    api_url = this.apipath + '\/' + prefill.id
+                    method = 'put'
+                }
 
                 keys.forEach((key, value) => {
                     let data = this.metadata[key]
@@ -203,13 +210,9 @@
                 this.formdata = {
                     request: {
                         //post url
-                        url:this.apipath,
+                        url: api_url,
                         //method
-                        method:'post',
-                        /* headers:new Headers({
-                            'X-CSRF-TOKEN':document.head.querySelector('meta[name="csrf-token"]').content
-                        }),
-                        credentials:'include' */
+                        method:method
                     },
                     submitText:'Register',
                     submitClass:'btn btn-primary',
@@ -229,7 +232,7 @@
             getPages: function() {
 
                 var start = 1,
-                    end   = this.data.last_page,
+                    end = this.data.last_page,
                     current = this.data.current_page,
                     pages = [],
                     index
@@ -303,7 +306,7 @@
                 }
             },
             add() {
-                this.buildFormData({})
+                this.buildFormData()
                 this.formdata.ModalShow = true
             },
             edit(key) {

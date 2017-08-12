@@ -17,12 +17,11 @@
 											   :error="form.errors.has(input.name) ? form.errors.get(input.name) : false"
 								></dynamic-input>
 							</div>
-							<input type="submit" :class="config.submitClass" :value="config.submitText || 'Submit'">
 						</form>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<button type="button" class="btn btn-primary">Save changes</button>
+						<button type="button" class="btn btn-primary" @click.prevent="onSubmit">Save changes</button>
 					</div>
 				</div><!-- /.modal-content -->
 			</div><!-- /.modal-dialog -->
@@ -103,7 +102,11 @@ export default {
 		onSubmit() {
 			this.form.submit()
 			.then((response) => {
-				this.$emit('succes',{res:response,data:this.form.data()})
+				this.$emit('success',{
+				    res:response,data:this.form.data()
+				})
+                this.config.ModalShow = false
+
 			})
 			.catch((err) => {
 				this.$emit('fail',err)
