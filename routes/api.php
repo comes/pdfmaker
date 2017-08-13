@@ -24,4 +24,11 @@ Route::resource('/meta', MetaController::class,['only' => [
 Route::resource('/product', ProductController::class,['only' => [
     'index', 'show', 'store', 'update','destroy'
 ]]);
+
 Route::get('/product/meta/describe', 'ProductController@describe');
+
+Route::resource('/catalog', CatalogController::class,['only' => [
+    'index', 'show', 'store', 'update','destroy'
+]]);
+
+Route::get('/catalog/meta/describe', 'CatalogController@describe');

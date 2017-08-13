@@ -70,7 +70,6 @@ export class Form{
 	 *Resets all values in the form + clears the errors
 	*/
 	reset() {
-        let data = {}
         for (let prop in this.originalData) {
 			this[prop].value = ''
         }

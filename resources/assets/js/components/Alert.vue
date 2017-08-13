@@ -1,9 +1,11 @@
 <template>
-    <div class="alert" :class="[alertState,{'alert-with-icon':hasIcon}]" data-notify="container">
-        <i class="material-icons" :class="{'icon-spin':rotate}" data-notify="icon" v-if="hasIcon">{{icon}}</i>
-        <button type="button" aria-hidden="true" class="close" v-if="isCloseable">
-            <i class="material-icons">close</i>
+    <div class="alert alert-white rounded" :class="[alertState,{'alert-with-icon':hasIcon}]" data-notify="container">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close" v-if="isCloseable">
+            <span aria-hidden="true">&times;</span>
         </button>
+        <div class="icon" v-if="hasIcon">
+            <i :class="icon" data-notify="icon"></i>
+        </div>
         <span data-notify="message"><slot></slot></span>
     </div>
 </template>

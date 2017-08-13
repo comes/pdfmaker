@@ -2,20 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProductRequest;
-use App\Product;
+use App\Catalog;
 use Illuminate\Http\Request;
 
-class ProductController extends Controller
+class CatalogController extends Controller
 {
     /**
-     * Display a listing of th  e resource.
+     * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     public function index()
     {
-        return Product::paginate(10);
+        return Catalog::paginate(10);
     }
 
     /**
@@ -24,11 +23,11 @@ class ProductController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProductRequest $request)
+    public function store(Request $request)
     {
-        $product = (new Product)->forceFill($request->all());
-        if ($product->save()) {
-            return $product;
+        $catalog = (new Catalog())->forceFill($request->all());
+        if ($catalog->save()) {
+            return $catalog;
         } else {
             throw new \Exception('Could not save object!');
         }
@@ -37,26 +36,37 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Catalog  $catalog
      * @return \Illuminate\Http\Response
      */
-    public function show(Product $product)
+    public function show(Catalog $catalog)
     {
-        return $product;
+        return $catalog;
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Catalog  $catalog
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(Catalog $catalog)
+    {
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Product  $product
-     * @throws \Exception
+     * @param  \App\Catalog  $catalog
+     * @throws \Exception Could not update Object
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, Catalog $catalog)
     {
-        if ($product->update($request->all())) {
-            return $product;
+        if ($catalog->update($request->all())) {
+            return $catalog;
         } else {
             throw new \Exception('Could not update object!');
         }
@@ -65,12 +75,12 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Product  $product
+     * @param  \App\Catalog  $catalog
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Product $product)
+    public function destroy(Catalog $catalog)
     {
-        $product->delete();
+        $catalog->delete();
     }
 
     /**
@@ -79,6 +89,6 @@ class ProductController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function describe() {
-        return Product::getDescription();
+        return Catalog::getDescription();
     }
 }

@@ -19,7 +19,9 @@
     "vue": "^2.1.10"
   },
   "dependencies": {
+    "font-awesome": "^4.7.0",
     "vue-dynamic-forms": "^1.1.0",
-    "vue-multiselect": "^2.0.2"
+    "vue-multiselect": "^2.0.2",
+    "vue-router": "^2.7.0"
   }
 }

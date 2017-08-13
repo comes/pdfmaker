@@ -25,21 +25,24 @@
                 <alert v-if="data.total == 0" v-bind:closeable="false" state="info">Keine Daten vorhanden</alert>
 
                 <div class="table-responsive" v-if="data.total > 0">
-                    <table class="table">
+                    <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th v-for="key in keys">
-                                {{ key }}
-                            </th>
-                            <th>
-                                Actions
-                            </th>
+                            <th v-for="key in keys">{{ key }}</th>
+                            <th class="text-right">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr v-for="column in data.data">
                             <td v-for="key in keys" v-html>
-                                {{ column[key] }}
+                                <span v-if="typeof column[key] == 'boolean'">
+                                    <i class="glyphicon"
+                                       :class="(column[key])?'glyphicon-ok text-success':'glyphicon-remove text-danger'"></i>
+                                </span>
+                                <span v-else>
+                                    {{ column[key] }}
+                                </span>
+
                             </td>
                             <td class="td-actions text-right">
                                 <div class="btn-group" role="group" aria-label="action">
@@ -78,7 +81,7 @@
                             </a>
                         </li>
                         <li v-bind:class="[data.next_page_url != null ? '' : 'disabled']">
-                            <a aria-label="Next" @click.prevent="selectPage(data.last_pages)">
+                            <a aria-label="Next" @click.prevent="selectPage(data.last_page)">
                                 <span aria-hidden="true">&raquo;</span>
                             </a>
                         </li>
@@ -92,19 +95,27 @@
 <script>
     import Alert from './Alert'
     import Demo from './Demo'
-    import Modal from './Modal'
     import dynamicForm from '../libs/dynamic-form'
     export default {
         components: {
             Alert,
-            dynamicForm,
-            Modal
+            dynamicForm
         },
-        props: [
-            'vname',
-            'apipath',
-            'type'
-        ],
+        props: {
+            'blacklist': {
+                type: Array,
+                default: () => {return []}
+            },
+            'vname': {
+                type: String
+            },
+            'apipath': {
+                type: String
+            },
+            'type' : {
+                type: String
+            }
+        },
         data () {
             return {
                 uniqId: '',
@@ -116,15 +127,6 @@
                 keys: [],
                 data: null, // table data
                 error: null,
-                blacklist: [
-                    'created_at',
-                    'updated_at',
-                    'objecttype',
-                    'objecttypes_id',
-                    'password',
-                    'deleted_at',
-                    'tags'
-                ],
                 metadata : {}
             }
         },
@@ -248,7 +250,7 @@
                     .then(response => {
                         this.loading = false
                         this.metadata = response.data
-                    }, (response) => {
+                    }, ( /* response */ ) => {
                         // error callback
                         this.loading = false
                         this.error = 'something went wrong'
@@ -268,7 +270,7 @@
                                 return blacklist.indexOf(String(key).toLowerCase()) < 0
                             })
                         }
-                    }, (response) => {
+                    }, ( /* response */ ) => {
                         // error callback
                         this.loading = false
                         this.error = 'something went wrong'
@@ -276,7 +278,6 @@
             },
             showPrevPage() {
                 axios.get(this.data.prev_page_url).then((r) => {
-                    console.log(r);
                     this.data = r.data
                 });
             },
@@ -299,7 +300,7 @@
                     axios.delete(this.data.path + '/' + key)
                         .then(response => {
                             this.refresh()
-                        }, (response) => {
+                        }, ( /* response */ ) => {
                             // error callback
                             this.error = 'something went wrong'
                         })
@@ -311,13 +312,14 @@
             },
             edit(key) {
                 axios.get(this.data.path + '/' + key).then(
-                    response => {
+                    response => { // success
                         this.buildFormData(response.data)
                         this.formdata.ModalShow = true
-                    }, //
-                    response => {}  // error
+                    },
+                    response => {
+                        // error
+                    }
                 )
-                //
             }
         }
     }
