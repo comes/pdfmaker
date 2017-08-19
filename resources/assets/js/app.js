@@ -9,23 +9,21 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 import VueRouter from 'vue-router'
-import ProductPage from './components/ProductPage.vue'
+import routes from './routes'
+import ProductPage from './pages/Product/ProductPage.vue'
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('Alert', require('./components/Alert.vue'));
-Vue.component('remote-data-table', require('./components/RemoteDataTable.vue'));
-
-
-const routes = [
-    { path: '/product/:id', component: require('./components/ProductPage.vue') },
-]
+Vue.component('Alert', require('./components/Alert.vue'))
+Vue.component('remote-data-table', require('./components/RemoteDataTable.vue'))
+Vue.component('navbar-links', require('./components/NavbarLinks.vue'))
 
 const router = new VueRouter({
-    routes // kurz für 'routes: routes'
+    routes, // kurz für 'routes: routes'
+    linkActiveClass: 'active'
 })
 Vue.use(VueRouter)
 const app = new Vue({
