@@ -28,7 +28,10 @@
                     <table class="table table-striped table-hover">
                         <thead>
                         <tr>
-                            <th v-for="key in keys">{{ key }}</th>
+                            <th v-for="key in keys">
+                                <span v-if="key == 'id'">#</span>
+                                <span v-else>{{ key }}</span>
+                            </th>
                             <th class="text-right">Actions</th>
                         </tr>
                         </thead>
@@ -39,6 +42,12 @@
                                     <i class="glyphicon"
                                        :class="(column[key])?'glyphicon-ok text-success':'glyphicon-remove text-danger'"></i>
                                 </span>
+                                <span v-else-if="key == 'name' || key == 'id'">
+                                    <router-link :to="{ name: type + '-show', params: {id: column.id}}">
+                                        {{ column[key] }}
+                                    </router-link>
+                                </span>
+
                                 <span v-else>
                                     {{ column[key] }}
                                 </span>
@@ -46,10 +55,14 @@
                             </td>
                             <td class="td-actions text-right">
                                 <div class="btn-group" role="group" aria-label="action">
-                                    <a @click.prevent="edit(column.id)" class="btn btn-default btn-sm">
+                                    <router-link :to="{ name: type + '-show', params: {id: column.id}}"
+                                                 class="btn btn-default btn-xs">
+                                        <i class="glyphicon glyphicon-eye-open"></i>
+                                    </router-link>
+                                    <a @click.prevent="edit(column.id)" class="btn btn-default btn-xs">
                                         <i class="glyphicon glyphicon-pencil"></i>
                                     </a>
-                                    <a @click.prevent="destroy(column.id)" class="btn btn-danger btn-sm">
+                                    <a @click.prevent="destroy(column.id)" class="btn btn-danger btn-xs">
                                         <i class="glyphicon glyphicon-trash"></i>
                                     </a>
                                 </div>
